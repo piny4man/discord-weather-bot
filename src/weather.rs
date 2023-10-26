@@ -55,8 +55,9 @@ pub async fn get_forecast(
     const LOCATION_REQUEST: &str = "http://dataservice.accuweather.com/locations/v1/cities/search";
     const DAY_REQUEST: &str = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/";
 
-    let url = format!("{}?apikey={}&q{}", LOCATION_REQUEST, api_key, place);
+    let url = format!("{}?apikey={}&q={}", LOCATION_REQUEST, api_key, place);
     let request = client.get(url).build().unwrap();
+
     let resp = client
         .execute(request)
         .await?

@@ -49,7 +49,7 @@ impl EventHandler for Bot {
         if let Interaction::ApplicationCommand(command) = interaction {
             let response_content = match command.data.name.as_str() {
                 "hello" => "Que pasa pinyas".to_owned(),
-                "weater" => {
+                "weather" => {
                     let argument = command
                         .data
                         .options
@@ -59,13 +59,15 @@ impl EventHandler for Bot {
 
                     let value = argument.unwrap().value.unwrap();
                     let place = value.as_str().unwrap();
-                    let result = weather::get_forecast(place, api_key, client).await;
+                    let result =
+                        weather::get_forecast(place, &self.weather_api_key, &self.client).await;
 
                     match result {
                         Ok((location, forecast)) => {
                             format!("Forecast: {} in {}", forecast.headline.overview, location)
                         }
                         Err(err) => {
+                            error!("Error getting forecast: {:?}", err);
                             format!("Err: {}", err)
                         }
                     }
